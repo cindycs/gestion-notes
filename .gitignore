@@ -1,9 +1,25 @@
-HELP.md
-target/
+# ===============================
+# Fichiers générés par le projet
+# ===============================
+/target/
+*.class
+*.jar
+*.war
+
+# Maven wrapper
 .mvn/wrapper/maven-wrapper.jar
+
+# ===============================
+# Intégration de src et build spécifiques
+# ===============================
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
+# ===============================
+# IDEs
+# ===============================
 ### STS ###
 .apt_generated
 .classpath
@@ -14,7 +30,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -25,9 +41,23 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+# ===============================
+# Logs et fichiers temporaires
+# ===============================
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+spring.log
+
+# ===============================
+# Configuration locale (optionnel)
+# ===============================
+*.env
