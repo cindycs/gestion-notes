@@ -9,10 +9,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class Notes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id_notes;
     private int note;
+
+    //Création des clés étrangères
+    @ManyToOne
+    @JoinColumn(name = "id_eleve")
+    private Eleves eleve;
+
+    @ManyToOne
+    @JoinColumn(name = "id_matiere")
+    private Matieres matiere;
 }
