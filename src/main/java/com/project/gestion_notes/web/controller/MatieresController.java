@@ -30,6 +30,14 @@ public class MatieresController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); // 404 sinon
     }
 
+    @PostMapping("/matieres")
+    @Operation(summary = "Créer une matiere")
+    public ResponseEntity<Matieres> createMatiere(@RequestBody Matieres matiere){
+
+        Matieres saved = matieresRepository.save(matiere);
+        return ResponseEntity.status(201).body(saved);
+    }
+
     @PutMapping("/matieres/{id}")
     @Operation(summary = "Mettre à jour une matière")
     public ResponseEntity<Matieres> updateMatiere(
@@ -46,6 +54,7 @@ public class MatieresController {
     }
 
     @DeleteMapping("/matieres/{id}")
+    @Operation(summary = "Supprimer un élève selon id")
     public ResponseEntity<?> deleteMatiere(@PathVariable int id) {
 
         return matieresRepository.findById(id)
