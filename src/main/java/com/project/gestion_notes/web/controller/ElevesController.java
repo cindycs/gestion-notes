@@ -4,10 +4,13 @@ package com.project.gestion_notes.web.controller;
 import com.project.gestion_notes.entity.Eleves;
 
 import com.project.gestion_notes.repository.ElevesRepository;
+import com.project.gestion_notes.web.dto.EleveRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -35,17 +38,18 @@ public class ElevesController {
     @Operation(summary = "Mettre à jour un élève")
     public ResponseEntity<Eleves> updateEleve(
             @PathVariable int id,
-            @RequestBody Eleves eleveDetails) {
+            @RequestBody EleveRequest request) {
 
-        return elevesRepository.findById(id)
-                .map(eleve -> {
-                    eleve.setNom(eleveDetails.getNom());
-                    eleve.setPrenom(eleveDetails.getPrenom());
+        Eleves eleve = elevesRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Élève introuvable"));
 
-                    Eleves updated = elevesRepository.save(eleve);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(()-> ResponseEntity.notFound().build());
+        eleve.setNom(request.getNom());
+        eleve.setPrenom(request.getPrenom());
+
+        Eleves updated = elevesRepository.save(eleve);
+
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/eleves/{id}")
@@ -62,9 +66,14 @@ public class ElevesController {
 
     @PostMapping("/eleves")
     @Operation(summary = "Créer un élève")
-    public ResponseEntity<Eleves> createEleve(@RequestBody Eleves eleve) {
+    public ResponseEntity<Eleves> createEleve(@RequestBody EleveRequest request) {
+
+        Eleves eleve = new Eleves();
+        eleve.setNom(request.getNom());
+        eleve.setPrenom(request.getPrenom());
 
         Eleves saved = elevesRepository.save(eleve);
+
         return ResponseEntity.status(201).body(saved);
     }
 

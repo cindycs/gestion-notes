@@ -2,6 +2,7 @@ package com.project.gestion_notes.web.controller;
 
 import com.project.gestion_notes.entity.Matieres;
 import com.project.gestion_notes.repository.MatieresRepository;
+import com.project.gestion_notes.web.dto.MatiereRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,10 @@ public class MatieresController {
 
     @PostMapping("/matieres")
     @Operation(summary = "Créer une matiere")
-    public ResponseEntity<Matieres> createMatiere(@RequestBody Matieres matiere){
+    public ResponseEntity<Matieres> createMatiere(@RequestBody MatiereRequest request){
+
+        Matieres matiere = new Matieres();
+        matiere.setMatiere(request.getMatiere());
 
         Matieres saved = matieresRepository.save(matiere);
         return ResponseEntity.status(201).body(saved);
@@ -42,15 +46,15 @@ public class MatieresController {
     @Operation(summary = "Mettre à jour une matière")
     public ResponseEntity<Matieres> updateMatiere(
             @PathVariable int id,
-            @RequestBody Matieres matiereDetails) {
+            @RequestBody MatiereRequest request) {
 
         return matieresRepository.findById(id)
                 .map(matiere -> {
-                    matiere.setMatiere(matiereDetails.getMatiere());
+                    matiere.setMatiere(request.getMatiere());
                     Matieres updated = matieresRepository.save(matiere);
-                    return ResponseEntity.ok(updated); // 200
+                    return ResponseEntity.ok(updated);
                 })
-                .orElseGet(() -> ResponseEntity.notFound().build()); // 404
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/matieres/{id}")
